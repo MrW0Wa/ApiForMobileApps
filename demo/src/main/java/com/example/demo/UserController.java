@@ -49,14 +49,52 @@ public class UserController {
         return users;
     }
     @DeleteMapping("/{userid}")
-    public String geleteUser(@PathVariable("userid") int userid){
-        users.removeIf(user -> (user.getId() == userid));
-        return "user " + userid + " have been deleted";
+    public String deleteUser(@PathVariable("userid") int userid){
+
+        for (User i : users){
+            if(i.getId() == userid){
+                users.removeIf(user -> (user.getId() == userid));
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.enable(SerializationFeature.INDENT_OUTPUT);
+                try {
+                    mapper.writeValue(new File(fileName), users);
+                }
+                catch(IOException e){
+                    e.printStackTrace();
+                }
+                return "user " + userid + " have been deleted";
+
+            }
+        }
+        return "failed";
+    }
+
+    @DeleteMapping("/all")
+    public String deleteAllUsers(){
+
+        users.clear();
+        return "success";
     }
 
     @PostMapping("/add")
     public String addUser(@RequestBody User user){
+
+
+        for(User i : users){
+
+            if(i.getPhoneNumber().equals(user.getPhoneNumber())){
+                return "the user with the same phone number already exists";
+            }
+            if(i.getEmail().equals(user.getEmail())){
+                return "user with the same Email already exists";
+            }
+            if(i.getId() == user.getId()){
+                return "user with this id is already registered";
+            }
+        }
+
         users.add(user);
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
@@ -73,7 +111,7 @@ public class UserController {
         for (int i = 0; i < users.size(); i++){
             if (users.get(i).getId() == userid){
                 users.get(i).setPassword(newpassword);
-                return "succes";
+                return "success";
             }
         }
         return "failed";
