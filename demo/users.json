@@ -2,12 +2,5 @@
   "name" : "KOKO",
   "email" : "kk@gmail.com",
   "password" : "jdfkdjssk",
-  "phoneNumber" : "44488",
-  "id" : 1
-}, {
-  "name" : "KOKO",
-  "email" : "kk00@gmail.com",
-  "password" : "jdfkdjssk",
-  "phoneNumber" : "58395",
-  "id" : 2
+  "phoneNumber" : "44488"
 } ]

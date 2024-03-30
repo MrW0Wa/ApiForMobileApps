@@ -35,10 +35,10 @@ public class UserController {
         }
    }
 
-    @GetMapping("/{userid}")
-    public User getUser(@PathVariable("userid") int userid){
+    @GetMapping("/{email}")
+    public User getUser(@PathVariable("email") int email){
         for (User user : users){
-            if (user.getId() == userid){
+            if (user.getEmail().equals(email)){
                 return user;
             }
         }
@@ -48,12 +48,12 @@ public class UserController {
     public ArrayList<User> getAllUsers(){
         return users;
     }
-    @DeleteMapping("/{userid}")
-    public String deleteUser(@PathVariable("userid") int userid){
+    @DeleteMapping("/{email}")
+    public String deleteUser(@PathVariable("email") String email){
 
         for (User i : users){
-            if(i.getId() == userid){
-                users.removeIf(user -> (user.getId() == userid));
+            if(i.getEmail().equals(email)){
+                users.removeIf(user -> (user.getEmail().equals(email)));
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
                 try {
@@ -62,7 +62,7 @@ public class UserController {
                 catch(IOException e){
                     e.printStackTrace();
                 }
-                return "user " + userid + " have been deleted";
+                return "user " + email + " have been deleted";
 
             }
         }
@@ -88,9 +88,6 @@ public class UserController {
             if(i.getEmail().equals(user.getEmail())){
                 return "user with the same Email already exists";
             }
-            if(i.getId() == user.getId()){
-                return "user with this id is already registered";
-            }
         }
 
         users.add(user);
@@ -106,10 +103,10 @@ public class UserController {
         return "user " + user.getName() + " have been added";
     }
 
-    @PostMapping("/{userid}")
-    public String changePassword(@PathVariable("userid")int userid, @RequestBody String newpassword){
+    @PostMapping("/{email}")
+    public String changePassword(@PathVariable("email")int email, @RequestBody String newpassword){
         for (int i = 0; i < users.size(); i++){
-            if (users.get(i).getId() == userid){
+            if (users.get(i).getEmail().equals(email)){
                 users.get(i).setPassword(newpassword);
                 return "success";
             }
